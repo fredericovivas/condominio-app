@@ -1,0 +1,8 @@
+# Credenciais — nunca partilhar
+App.config
+
+# Ficheiros gerados automaticamente
+bin/
+obj/
+*.user
+.vs/
