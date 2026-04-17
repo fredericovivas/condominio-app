@@ -114,5 +114,36 @@ namespace CondominioApp.Repositories
                 cmd.ExecuteNonQuery();
             }
         }
+
+        // ── LISTAR APENAS EVENTOS DE PRAZO DE PAGAMENTO ───────────────
+        public List<Evento> GetPrazosPagamento()
+        {
+            var lista = new List<Evento>();
+
+            using (var conn = DatabaseConnection.GetConnection())
+            {
+                conn.Open();
+                var cmd = new MySqlCommand(
+                    "SELECT id_evento, titulo, tipo, data, descricao FROM evento WHERE tipo = 'prazo_pagamento' ORDER BY data",
+                    conn);
+
+                using (var reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        lista.Add(new Evento
+                        {
+                            IdEvento = reader.GetInt32("id_evento"),
+                            Titulo = reader.GetString("titulo"),
+                            Tipo = TipoEvento.PrazoPagamento,
+                            Data = reader.GetDateTime("data"),
+                            Descricao = reader.IsDBNull(reader.GetOrdinal("descricao")) ? "" : reader.GetString("descricao")
+                        });
+                    }
+                }
+            }
+
+            return lista;
+        }
     }
 }

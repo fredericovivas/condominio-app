@@ -9,7 +9,7 @@ namespace CondominioApp.Forms
     {
         private readonly IntervencaoRepository _repo = new IntervencaoRepository();
         private readonly EventoRepository _repoEvento = new EventoRepository();
-        private int _idSelecionado = -1;
+
 
         public FormIntervencoes()
         {
@@ -178,7 +178,6 @@ namespace CondominioApp.Forms
             txtDescricao.Clear();
             txtCusto.Clear();
             dtpData.Value = DateTime.Now;
-            _idSelecionado = -1;
             btnApagar.Enabled = false;
             dgvIntervencoes.ClearSelection();
         }

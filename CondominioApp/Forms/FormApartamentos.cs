@@ -13,6 +13,9 @@ namespace CondominioApp.Forms
         public FormApartamentos()
         {
             InitializeComponent();
+            CarregarGrelha();
+            btnEditar.Enabled = false;
+            btnApagar.Enabled = false;
         }
 
         // ── Quando o formulário abre ──────────────────────────────────
@@ -21,6 +24,11 @@ namespace CondominioApp.Forms
             CarregarGrelha();
             btnEditar.Enabled = false;
             btnApagar.Enabled = false;
+        }
+
+        private void FormApartamentos_Activated(object sender, EventArgs e)
+        {
+            CarregarGrelha();
         }
 
         // ── Carrega os dados na grelha ────────────────────────────────
@@ -207,6 +215,11 @@ namespace CondominioApp.Forms
         }
 
         private void FormApartamentos_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void FormApartamentos_Activated_1(object sender, EventArgs e)
         {
 
         }

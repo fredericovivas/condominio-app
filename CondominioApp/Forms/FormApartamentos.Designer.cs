@@ -167,6 +167,7 @@
             this.Name = "FormApartamentos";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestão de Apartamentos";
+            this.Activated += new System.EventHandler(this.FormApartamentos_Activated_1);
             this.Load += new System.EventHandler(this.FormApartamentos_Load_1);
             ((System.ComponentModel.ISupportInitialize)(this.dgvApartamentos)).EndInit();
             this.ResumeLayout(false);

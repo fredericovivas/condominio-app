@@ -17,6 +17,14 @@ namespace CondominioApp.Forms
             InitializeComponent();
         }
 
+        // -- Refresh ao abrir --------------
+        private void FormPagamentos_Activated(object sender, EventArgs e)
+        {
+            CarregarCondominos();
+            CarregarEventos();
+            CarregarGrelha();
+        }
+
         // ── Quando o formulário abre ──────────────────────────────────
         private void FormPagamentos_Load(object sender, EventArgs e)
         {
@@ -40,7 +48,7 @@ namespace CondominioApp.Forms
 
         private void CarregarEventos()
         {
-            var lista = _repoEvento.GetAll();
+            var lista = _repoEvento.GetPrazosPagamento();
             cmbEvento.DataSource = lista;
             cmbEvento.DisplayMember = "Titulo";
             cmbEvento.ValueMember = "IdEvento";
@@ -278,6 +286,11 @@ namespace CondominioApp.Forms
             btnMarcarPago.Enabled = false;
             btnApagar.Enabled = false;
             dgvPagamentos.ClearSelection();
+        }
+
+        private void FormPagamentos_Activated_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

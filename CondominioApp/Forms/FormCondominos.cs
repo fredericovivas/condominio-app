@@ -16,6 +16,13 @@ namespace CondominioApp.Forms
             InitializeComponent();
         }
 
+        private void FormCondominos_Activated(object sender, EventArgs e)
+        {
+            CarregarApartamentos();
+            CarregarGrelha();
+        }
+
+
         // ── Quando o formulário abre ──────────────────────────────────
         private void FormCondominos_Load(object sender, EventArgs e)
         {
@@ -29,8 +36,26 @@ namespace CondominioApp.Forms
         private void CarregarApartamentos()
         {
             var lista = _repoApartamento.GetAll();
+
+            // Ordena no C# pelo número convertido para inteiro
+            lista.Sort((a, b) =>
+            {
+                int numA, numB;
+                bool aIsNum = int.TryParse(a.Numero, out numA);
+                bool bIsNum = int.TryParse(b.Numero, out numB);
+
+                // Se ambos forem números, compara numericamente
+                if (aIsNum && bIsNum)
+                    return numA.CompareTo(numB);
+
+                // Caso contrário, compara como texto
+                return string.Compare(a.Numero, b.Numero, StringComparison.Ordinal);
+            });
+
+            cmbApartamento.DataSource = null;   // limpa o DataSource anterior
+            cmbApartamento.Items.Clear();
             cmbApartamento.DataSource = lista;
-            cmbApartamento.DisplayMember = "ToString"; // usa o ToString() da classe
+            cmbApartamento.DisplayMember = "Display";
             cmbApartamento.ValueMember = "IdApartamento";
             cmbApartamento.SelectedIndex = -1;
         }
@@ -214,6 +239,11 @@ namespace CondominioApp.Forms
             btnEditar.Enabled = false;
             btnApagar.Enabled = false;
             dgvCondominos.ClearSelection();
+        }
+
+        private void FormCondominos_Activated_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

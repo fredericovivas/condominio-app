@@ -204,6 +204,7 @@
             this.Name = "FormPagamentos";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestão de Pagamentos";
+            this.Activated += new System.EventHandler(this.FormPagamentos_Activated_1);
             this.Load += new System.EventHandler(this.FormPagamentos_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvPagamentos)).EndInit();
             this.ResumeLayout(false);

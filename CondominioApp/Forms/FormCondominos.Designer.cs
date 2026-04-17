@@ -188,6 +188,7 @@
             this.Name = "FormCondominos";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gestão de Condóminos";
+            this.Activated += new System.EventHandler(this.FormCondominos_Activated_1);
             this.Load += new System.EventHandler(this.FormCondominos_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dgvCondominos)).EndInit();
             this.ResumeLayout(false);
