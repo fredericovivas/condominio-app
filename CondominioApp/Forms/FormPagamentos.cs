@@ -66,6 +66,11 @@ namespace CondominioApp.Forms
         // ── Carrega os pagamentos na grelha ───────────────────────────
         private void CarregarGrelha()
         {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
+        }
+
+        private void FiltrarGrelha(string termo)
+        {
             var lista = _repoPagamento.GetAll();
 
             dgvPagamentos.Rows.Clear();
@@ -87,16 +92,26 @@ namespace CondominioApp.Forms
 
             foreach (var p in lista)
             {
+                string estadoTexto = p.Estado == EstadoPagamento.Pago ? "Pago" : "Em dívida";
+
+                bool corresponde =
+                    string.IsNullOrEmpty(termo) ||
+                    p.Condomino.Nome.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    p.Evento.Titulo.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    estadoTexto.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    p.Valor.ToString("F2").IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0;
+
+                if (!corresponde) continue;
+
                 var row = dgvPagamentos.Rows.Add(
                     p.IdPagamento,
                     p.Condomino.Nome,
                     p.Evento.Titulo,
                     p.Valor.ToString("F2"),
-                    p.Estado == EstadoPagamento.Pago ? "Pago" : "Em dívida",
+                    estadoTexto,
                     p.DataRegisto.ToString("dd/MM/yyyy HH:mm")
                 );
 
-                // Colore a linha a vermelho se estiver em dívida
                 if (p.Estado == EstadoPagamento.EmDivida)
                     dgvPagamentos.Rows[row].DefaultCellStyle.ForeColor = System.Drawing.Color.Red;
             }
@@ -291,6 +306,11 @@ namespace CondominioApp.Forms
         private void FormPagamentos_Activated_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtPesquisa_TextChanged(object sender, EventArgs e)
+        {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
         }
     }
 }

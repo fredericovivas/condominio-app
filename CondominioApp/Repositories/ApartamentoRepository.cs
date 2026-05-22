@@ -8,7 +8,7 @@ namespace CondominioApp.Repositories
 {
     public class ApartamentoRepository
     {
-        // ── LISTAR TODOS ──────────────────────────────────────────────
+        // LISTAR TODOS
         public List<Apartamento> GetAll()
         {
             var lista = new List<Apartamento>();
@@ -38,7 +38,7 @@ namespace CondominioApp.Repositories
             return lista;
         }
 
-        // ── INSERIR ───────────────────────────────────────────────────
+        //INSERIR
         public void Insert(Apartamento a)
         {
             using (var conn = DatabaseConnection.GetConnection())
@@ -56,7 +56,7 @@ namespace CondominioApp.Repositories
             }
         }
 
-        // ── ATUALIZAR ─────────────────────────────────────────────────
+        // ATUALIZAR
         public void Update(Apartamento a)
         {
             using (var conn = DatabaseConnection.GetConnection())
@@ -75,7 +75,7 @@ namespace CondominioApp.Repositories
             }
         }
 
-        // ── APAGAR ────────────────────────────────────────────────────
+        // APAGAR
         public void Delete(int id)
         {
             using (var conn = DatabaseConnection.GetConnection())

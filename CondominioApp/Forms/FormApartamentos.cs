@@ -13,9 +13,9 @@ namespace CondominioApp.Forms
         public FormApartamentos()
         {
             InitializeComponent();
-            CarregarGrelha();
-            btnEditar.Enabled = false;
-            btnApagar.Enabled = false;
+            this.Load += FormApartamentos_Load;
+            txtPesquisa.TextChanged += txtPesquisa_TextChanged;
+            dgvApartamentos.SelectionChanged += dgvApartamentos_SelectionChanged;
         }
 
         // ── Quando o formulário abre ──────────────────────────────────
@@ -34,6 +34,11 @@ namespace CondominioApp.Forms
         // ── Carrega os dados na grelha ────────────────────────────────
         private void CarregarGrelha()
         {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
+        }
+
+        private void FiltrarGrelha(string termo)
+        {
             var lista = _repo.GetAll();
 
             dgvApartamentos.Rows.Clear();
@@ -51,6 +56,14 @@ namespace CondominioApp.Forms
 
             foreach (var a in lista)
             {
+                bool corresponde =
+                    string.IsNullOrEmpty(termo) ||
+                    a.Bloco.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    a.Numero.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    a.Piso.ToString().IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0;
+
+                if (!corresponde) continue;
+
                 dgvApartamentos.Rows.Add(
                     a.IdApartamento,
                     a.Bloco,
@@ -58,6 +71,7 @@ namespace CondominioApp.Forms
                     a.Numero
                 );
             }
+
         }
 
         // ── Botão Guardar ─────────────────────────────────────────────
@@ -147,8 +161,19 @@ namespace CondominioApp.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro ao apagar:\n\n" + ex.Message, "Erro",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (ex.Message.Contains("foreign key constraint"))
+                    {
+                        MessageBox.Show(
+                            "Não é possível apagar este registo porque tem dados associados.\n\nElimina primeiro os registos relacionados.",
+                            "Ação não permitida",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao apagar:\n\n" + ex.Message, "Erro",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
@@ -211,7 +236,9 @@ namespace CondominioApp.Forms
 
         private void dgvApartamentos_SelectionChanged_1(object sender, EventArgs e)
         {
-
+            bool temSelecao = dgvApartamentos.CurrentRow != null;
+            btnEditar.Enabled = temSelecao;
+            btnApagar.Enabled = temSelecao;
         }
 
         private void FormApartamentos_Load_1(object sender, EventArgs e)
@@ -222,6 +249,11 @@ namespace CondominioApp.Forms
         private void FormApartamentos_Activated_1(object sender, EventArgs e)
         {
 
+        }
+
+        private void txtPesquisa_TextChanged(object sender, EventArgs e)
+        {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
         }
     }
 }

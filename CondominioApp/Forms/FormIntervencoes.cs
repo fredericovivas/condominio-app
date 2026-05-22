@@ -37,6 +37,11 @@ namespace CondominioApp.Forms
         // ── Carrega as intervenções na grelha ─────────────────────────
         private void CarregarGrelha()
         {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
+        }
+
+        private void FiltrarGrelha(string termo)
+        {
             var lista = _repo.GetAll();
 
             dgvIntervencoes.Rows.Clear();
@@ -56,11 +61,22 @@ namespace CondominioApp.Forms
 
             foreach (var i in lista)
             {
+                string custoTexto = i.Custo.HasValue ? i.Custo.Value.ToString("F2") : "-";
+
+                bool corresponde =
+                    string.IsNullOrEmpty(termo) ||
+                    i.Evento.Titulo.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    i.Descricao.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    custoTexto.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    i.Data.ToString("dd/MM/yyyy HH:mm").IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0;
+
+                if (!corresponde) continue;
+
                 dgvIntervencoes.Rows.Add(
                     i.IdIntervencao,
                     i.Evento.Titulo,
                     i.Descricao,
-                    i.Custo.HasValue ? i.Custo.Value.ToString("F2") : "-",
+                    custoTexto,
                     i.Data.ToString("dd/MM/yyyy HH:mm")
                 );
             }
@@ -180,6 +196,11 @@ namespace CondominioApp.Forms
             dtpData.Value = DateTime.Now;
             btnApagar.Enabled = false;
             dgvIntervencoes.ClearSelection();
+        }
+
+        private void txtPesquisa_TextChanged(object sender, EventArgs e)
+        {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
         }
     }
 }

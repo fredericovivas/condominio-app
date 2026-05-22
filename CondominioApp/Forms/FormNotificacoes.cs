@@ -37,6 +37,11 @@ namespace CondominioApp.Forms
         // ── Carrega as notificações na grelha ─────────────────────────
         private void CarregarGrelha()
         {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
+        }
+
+        private void FiltrarGrelha(string termo)
+        {
             var lista = _repo.GetAll();
 
             dgvNotificacoes.Rows.Clear();
@@ -54,6 +59,14 @@ namespace CondominioApp.Forms
 
             foreach (var n in lista)
             {
+                bool corresponde =
+                    string.IsNullOrEmpty(termo) ||
+                    n.Condomino.Nome.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    n.Mensagem.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    n.DataEnvio.ToString("dd/MM/yyyy HH:mm").IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0;
+
+                if (!corresponde) continue;
+
                 dgvNotificacoes.Rows.Add(
                     n.IdNotificacao,
                     n.Condomino.Nome,
@@ -166,6 +179,11 @@ namespace CondominioApp.Forms
             _idSelecionado = -1;
             btnApagar.Enabled = false;
             dgvNotificacoes.ClearSelection();
+        }
+
+        private void txtPesquisa_TextChanged(object sender, EventArgs e)
+        {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
         }
     }
 }

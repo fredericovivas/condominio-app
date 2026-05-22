@@ -59,6 +59,11 @@ namespace CondominioApp.Forms
         // ── Carrega os eventos na grelha ──────────────────────────────
         private void CarregarGrelha()
         {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
+        }
+
+        private void FiltrarGrelha(string termo)
+        {
             var lista = _repo.GetAll();
 
             dgvEventos.Rows.Clear();
@@ -85,6 +90,15 @@ namespace CondominioApp.Forms
                     case TipoEvento.PrazoPagamento: tipoTexto = "Prazo Pagamento"; break;
                     default: tipoTexto = "Reunião"; break;
                 }
+
+                bool corresponde =
+                    string.IsNullOrEmpty(termo) ||
+                    ev.Titulo.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    tipoTexto.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    ev.Descricao.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    ev.Data.ToString("dd/MM/yyyy HH:mm").IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0;
+
+                if (!corresponde) continue;
 
                 dgvEventos.Rows.Add(
                     ev.IdEvento,
@@ -199,8 +213,19 @@ namespace CondominioApp.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro ao apagar:\n\n" + ex.Message, "Erro",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (ex.Message.Contains("foreign key constraint"))
+                    {
+                        MessageBox.Show(
+                            "Não é possível apagar este registo porque tem dados associados.\n\nElimina primeiro os registos relacionados.",
+                            "Ação não permitida",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao apagar:\n\n" + ex.Message, "Erro",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
@@ -244,6 +269,11 @@ namespace CondominioApp.Forms
             btnEditar.Enabled = false;
             btnApagar.Enabled = false;
             dgvEventos.ClearSelection();
+        }
+
+        private void txtPesquisa_TextChanged(object sender, EventArgs e)
+        {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
         }
     }
 }

@@ -16,13 +16,6 @@ namespace CondominioApp.Forms
             InitializeComponent();
         }
 
-        private void FormCondominos_Activated(object sender, EventArgs e)
-        {
-            CarregarApartamentos();
-            CarregarGrelha();
-        }
-
-
         // ── Quando o formulário abre ──────────────────────────────────
         private void FormCondominos_Load(object sender, EventArgs e)
         {
@@ -32,27 +25,30 @@ namespace CondominioApp.Forms
             btnApagar.Enabled = false;
         }
 
+        private void FormCondominos_Activated(object sender, EventArgs e)
+        {
+            CarregarApartamentos();
+            CarregarGrelha();
+        }
+
         // ── Preenche o ComboBox com os apartamentos existentes ────────
         private void CarregarApartamentos()
         {
             var lista = _repoApartamento.GetAll();
 
-            // Ordena no C# pelo número convertido para inteiro
             lista.Sort((a, b) =>
             {
                 int numA, numB;
                 bool aIsNum = int.TryParse(a.Numero, out numA);
                 bool bIsNum = int.TryParse(b.Numero, out numB);
 
-                // Se ambos forem números, compara numericamente
                 if (aIsNum && bIsNum)
                     return numA.CompareTo(numB);
 
-                // Caso contrário, compara como texto
                 return string.Compare(a.Numero, b.Numero, StringComparison.Ordinal);
             });
 
-            cmbApartamento.DataSource = null;   // limpa o DataSource anterior
+            cmbApartamento.DataSource = null;
             cmbApartamento.Items.Clear();
             cmbApartamento.DataSource = lista;
             cmbApartamento.DisplayMember = "Display";
@@ -62,6 +58,16 @@ namespace CondominioApp.Forms
 
         // ── Carrega os condóminos na grelha ───────────────────────────
         private void CarregarGrelha()
+        {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
+        }
+
+        private void txtPesquisa_TextChanged(object sender, EventArgs e)
+        {
+            FiltrarGrelha(txtPesquisa.Text.Trim());
+        }
+
+        private void FiltrarGrelha(string termo)
         {
             var lista = _repoCondomino.GetAll();
 
@@ -73,17 +79,26 @@ namespace CondominioApp.Forms
             dgvCondominos.Columns.Add("colEmail", "Email");
             dgvCondominos.Columns.Add("colTelefone", "Telefone");
             dgvCondominos.Columns.Add("colApartamento", "Apartamento");
-            dgvCondominos.Columns.Add("colIdApt", "IdApt"); // coluna oculta
+            dgvCondominos.Columns.Add("colIdApt", "IdApt");
 
             dgvCondominos.Columns["colId"].Width = 40;
             dgvCondominos.Columns["colNome"].Width = 160;
             dgvCondominos.Columns["colEmail"].Width = 160;
             dgvCondominos.Columns["colTelefone"].Width = 100;
             dgvCondominos.Columns["colApartamento"].Width = 180;
-            dgvCondominos.Columns["colIdApt"].Visible = false; // esconde o id do apt
+            dgvCondominos.Columns["colIdApt"].Visible = false;
 
             foreach (var c in lista)
             {
+                bool corresponde =
+                    string.IsNullOrEmpty(termo) ||
+                    c.Nome.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    c.Email.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    c.Telefone.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                    c.Apartamento.Display.IndexOf(termo, StringComparison.OrdinalIgnoreCase) >= 0;
+
+                if (!corresponde) continue;
+
                 dgvCondominos.Rows.Add(
                     c.IdCondomino,
                     c.Nome,
@@ -186,8 +201,19 @@ namespace CondominioApp.Forms
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Erro ao apagar:\n\n" + ex.Message, "Erro",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    if (ex.Message.Contains("foreign key constraint"))
+                    {
+                        MessageBox.Show(
+                            $"Não é possível apagar o condómino '{nome}' porque tem pagamentos ou notificações associadas.\n\nElimina primeiro os registos associados.",
+                            "Ação não permitida",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Erro ao apagar:\n\n" + ex.Message, "Erro",
+                            MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
             }
         }
@@ -239,11 +265,6 @@ namespace CondominioApp.Forms
             btnEditar.Enabled = false;
             btnApagar.Enabled = false;
             dgvCondominos.ClearSelection();
-        }
-
-        private void FormCondominos_Activated_1(object sender, EventArgs e)
-        {
-
         }
     }
 }

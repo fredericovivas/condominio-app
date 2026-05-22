@@ -36,6 +36,8 @@
             this.btnLimpar = new System.Windows.Forms.Button();
             this.dgvNotificacoes = new System.Windows.Forms.DataGridView();
             this.btnApagar = new System.Windows.Forms.Button();
+            this.lblPesquisa = new System.Windows.Forms.Label();
+            this.txtPesquisa = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvNotificacoes)).BeginInit();
             this.SuspendLayout();
             // 
@@ -120,11 +122,30 @@
             this.btnApagar.UseVisualStyleBackColor = true;
             this.btnApagar.Click += new System.EventHandler(this.btnApagar_Click);
             // 
+            // lblPesquisa
+            // 
+            this.lblPesquisa.AutoSize = true;
+            this.lblPesquisa.Location = new System.Drawing.Point(380, 20);
+            this.lblPesquisa.Name = "lblPesquisa";
+            this.lblPesquisa.Size = new System.Drawing.Size(67, 16);
+            this.lblPesquisa.TabIndex = 9;
+            this.lblPesquisa.Text = "Pesquisa:";
+            // 
+            // txtPesquisa
+            // 
+            this.txtPesquisa.Location = new System.Drawing.Point(470, 17);
+            this.txtPesquisa.Name = "txtPesquisa";
+            this.txtPesquisa.Size = new System.Drawing.Size(200, 22);
+            this.txtPesquisa.TabIndex = 10;
+            this.txtPesquisa.TextChanged += new System.EventHandler(this.txtPesquisa_TextChanged);
+            // 
             // FormNotificacoes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(732, 453);
+            this.Controls.Add(this.txtPesquisa);
+            this.Controls.Add(this.lblPesquisa);
             this.Controls.Add(this.btnApagar);
             this.Controls.Add(this.dgvNotificacoes);
             this.Controls.Add(this.btnLimpar);
@@ -155,5 +176,7 @@
         private System.Windows.Forms.Button btnLimpar;
         private System.Windows.Forms.DataGridView dgvNotificacoes;
         private System.Windows.Forms.Button btnApagar;
+        private System.Windows.Forms.Label lblPesquisa;
+        private System.Windows.Forms.TextBox txtPesquisa;
     }
 }

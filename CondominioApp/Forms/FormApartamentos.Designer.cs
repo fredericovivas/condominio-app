@@ -39,6 +39,8 @@
             this.btnApagar = new System.Windows.Forms.Button();
             this.btnLimpar = new System.Windows.Forms.Button();
             this.dgvApartamentos = new System.Windows.Forms.DataGridView();
+            this.lblPesquisa = new System.Windows.Forms.Label();
+            this.txtPesquisa = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvApartamentos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -145,11 +147,30 @@
             this.dgvApartamentos.TabIndex = 10;
             this.dgvApartamentos.SelectionChanged += new System.EventHandler(this.dgvApartamentos_SelectionChanged_1);
             // 
+            // lblPesquisa
+            // 
+            this.lblPesquisa.AutoSize = true;
+            this.lblPesquisa.Location = new System.Drawing.Point(280, 20);
+            this.lblPesquisa.Name = "lblPesquisa";
+            this.lblPesquisa.Size = new System.Drawing.Size(67, 16);
+            this.lblPesquisa.TabIndex = 11;
+            this.lblPesquisa.Text = "Pesquisa:";
+            // 
+            // txtPesquisa
+            // 
+            this.txtPesquisa.Location = new System.Drawing.Point(370, 17);
+            this.txtPesquisa.Name = "txtPesquisa";
+            this.txtPesquisa.Size = new System.Drawing.Size(200, 22);
+            this.txtPesquisa.TabIndex = 12;
+            this.txtPesquisa.TextChanged += new System.EventHandler(this.txtPesquisa_TextChanged);
+            // 
             // FormApartamentos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(682, 453);
+            this.ClientSize = new System.Drawing.Size(682, 455);
+            this.Controls.Add(this.txtPesquisa);
+            this.Controls.Add(this.lblPesquisa);
             this.Controls.Add(this.dgvApartamentos);
             this.Controls.Add(this.btnLimpar);
             this.Controls.Add(this.btnApagar);
@@ -188,5 +209,7 @@
         private System.Windows.Forms.Button btnApagar;
         private System.Windows.Forms.Button btnLimpar;
         private System.Windows.Forms.DataGridView dgvApartamentos;
+        private System.Windows.Forms.Label lblPesquisa;
+        private System.Windows.Forms.TextBox txtPesquisa;
     }
 }

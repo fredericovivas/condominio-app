@@ -42,6 +42,8 @@
             this.btnLimpar = new System.Windows.Forms.Button();
             this.btnDevedores = new System.Windows.Forms.Button();
             this.dgvPagamentos = new System.Windows.Forms.DataGridView();
+            this.lblPesquisa = new System.Windows.Forms.Label();
+            this.txtPesquisa = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dgvPagamentos)).BeginInit();
             this.SuspendLayout();
             // 
@@ -180,11 +182,30 @@
             this.dgvPagamentos.TabIndex = 13;
             this.dgvPagamentos.SelectionChanged += new System.EventHandler(this.dgvPagamentos_SelectionChanged);
             // 
+            // lblPesquisa
+            // 
+            this.lblPesquisa.AutoSize = true;
+            this.lblPesquisa.Location = new System.Drawing.Point(493, 20);
+            this.lblPesquisa.Name = "lblPesquisa";
+            this.lblPesquisa.Size = new System.Drawing.Size(67, 16);
+            this.lblPesquisa.TabIndex = 14;
+            this.lblPesquisa.Text = "Pesquisa:";
+            // 
+            // txtPesquisa
+            // 
+            this.txtPesquisa.Location = new System.Drawing.Point(570, 17);
+            this.txtPesquisa.Name = "txtPesquisa";
+            this.txtPesquisa.Size = new System.Drawing.Size(200, 22);
+            this.txtPesquisa.TabIndex = 15;
+            this.txtPesquisa.TextChanged += new System.EventHandler(this.txtPesquisa_TextChanged);
+            // 
             // FormPagamentos
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(782, 503);
+            this.Controls.Add(this.txtPesquisa);
+            this.Controls.Add(this.lblPesquisa);
             this.Controls.Add(this.dgvPagamentos);
             this.Controls.Add(this.btnDevedores);
             this.Controls.Add(this.btnLimpar);
@@ -228,5 +249,7 @@
         private System.Windows.Forms.Button btnLimpar;
         private System.Windows.Forms.Button btnDevedores;
         private System.Windows.Forms.DataGridView dgvPagamentos;
+        private System.Windows.Forms.Label lblPesquisa;
+        private System.Windows.Forms.TextBox txtPesquisa;
     }
 }
