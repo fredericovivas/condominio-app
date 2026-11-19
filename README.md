@@ -87,9 +87,9 @@ Todas as chaves estrangeiras usam `ON DELETE RESTRICT`, por isso não é possív
 - Gráficos no dashboard
 - Versão web para acesso a partir de vários dispositivos
 
-## Autores
+## Autor
 
-António Sousa, Frederico Vivas, Renato Silva
+Frederico Vivas
 
 ## Licença
 
